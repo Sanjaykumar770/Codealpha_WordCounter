@@ -1,74 +1,59 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import javax.swing.*;
 
-public class WordCount {
+public class WordCount extends JFrame implements ActionListener {
+    JTextArea ta;
+    JButton b1, b2;
+
+    WordCount() {
+        super("Word Character Counter");
+
+        // Set up the JTextArea
+        ta = new JTextArea();
+        ta.setPreferredSize(new Dimension(300, 200));
+
+        // Set up the buttons
+        b1 = new JButton("Word Count");
+        b2 = new JButton("Character Count");
+
+        b1.addActionListener(this);
+        b2.addActionListener(this);
+
+        // Create a panel for the buttons and center them with spacing
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        buttonPanel.add(b1);
+        buttonPanel.add(b2);
+
+        // Create a panel for the text area and add it to a JScrollPane
+        JPanel textPanel = new JPanel();
+        textPanel.add(new JScrollPane(ta));
+
+        // Set the layout of the JFrame and add panels
+        setLayout(new BorderLayout());
+        add(textPanel, BorderLayout.CENTER);
+        add(buttonPanel, BorderLayout.SOUTH);
+
+        // Set the frame size and center it on the screen
+        setSize(400, 400);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);  // Center the window on the screen
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String text = ta.getText();
+        if (e.getSource() == b1) {
+            String[] words = text.trim().split("\\s+");
+            JOptionPane.showMessageDialog(this, "Total words: " + (text.isEmpty() ? 0 : words.length));
+        }
+        if (e.getSource() == b2) {
+            JOptionPane.showMessageDialog(this, "Total Characters (with spaces): " + text.length());
+        }
+    }
 
     public static void main(String[] args) {
-        // Create a new JFrame (the window)
-        JFrame frame = new JFrame("Word Counter");
-
-        // Set the size of the window
-        frame.setSize(500, 400);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null); // Center the window on the screen
-
-        // Create a JTextArea for the paragraph input with custom font and size
-        JTextArea textArea = new JTextArea();
-        textArea.setLineWrap(true);
-        textArea.setWrapStyleWord(true);
-        textArea.setFont(new Font("Arial", Font.PLAIN, 18));
-        textArea.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-
-        // Create a JLabel to display the word count with custom font and color
-        JLabel wordCountLabel = new JLabel("Word Count: 0");
-        wordCountLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        wordCountLabel.setForeground(Color.BLUE);
-        wordCountLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Create a JButton to trigger the word count with custom colors
-        JButton countButton = new JButton("Count Words");
-        countButton.setFont(new Font("Arial", Font.BOLD, 20));
-        countButton.setBackground(Color.DARK_GRAY);
-        countButton.setForeground(Color.WHITE);
-        countButton.setFocusPainted(false);
-        countButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Add ActionListener to the button to perform the word count
-        countButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Get the text from the JTextArea
-                String text = textArea.getText().trim();
-
-                // Split the text into words
-                if (text.isEmpty()) {
-                    wordCountLabel.setText("Word Count: 0");
-                } else {
-                    String[] words = text.split("\\s+");
-                    wordCountLabel.setText("Word Count: " + words.length);
-                }
-            }
-        });
-
-        // Create a JPanel to hold the components with improved layout
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        panel.setBackground(Color.WHITE);
-
-        // Add the components to the panel
-        panel.add(new JScrollPane(textArea));
-        panel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
-        panel.add(countButton);
-        panel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer
-        panel.add(wordCountLabel);
-
-        // Add the panel to the frame
-        frame.add(panel);
-
-        // Make the frame visible
-        frame.setVisible(true);
+        new WordCount();
     }
 }
